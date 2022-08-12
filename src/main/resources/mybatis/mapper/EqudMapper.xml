@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fwzg.dataanalyse.mapper.EqudMapper">
+    <!-- id：返回的是所有对象的Map集合，type：每个对象是User类 -->
+    <select id="getAllEqud"  parameterType="com.fwzg.dataanalyse.entity.Equd"   resultType="com.fwzg.dataanalyse.entity.Equd">
+        select deviceID  from equipment_info
+
+    </select>
+    <select id="getEqudList"  parameterType="com.fwzg.dataanalyse.entity.Equd"   resultType="com.fwzg.dataanalyse.entity.Equd">
+        select ID,deviceID,count from sys_devicemap
+        <where>
+            mname='累计工作时间'
+            <if test="deviceID != null">
+                and deviceID like '%' #{deviceID} '%'
+            </if>
+        </where>
+        limit #{start},#{limit}
+    </select>
+    <select id="countEqudList" parameterType="com.fwzg.dataanalyse.vo.EqudQuery"  resultType="Long">
+        select count(1) from sys_devicemap where  mname='累计工作时间'
+    </select>
+</mapper>
+

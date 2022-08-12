@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fwzg.equmap.mapper.EquMapMapper">
+    <select id="getEquMapList"   resultType="com.fwzg.equmap.entity.EquMap">
+        SELECT  real_gps.id,real_gps.jd,real_gps.wd,real_gps.chex FROM  real_gps
+        where  jd &lt;&gt;'' and  wd &lt;&gt;''
+    </select>
+
+</mapper>

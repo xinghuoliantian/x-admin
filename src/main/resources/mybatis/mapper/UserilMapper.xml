@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fwzg.quanx.mapper.UserilMapper">
+    <!-- id：返回的是所有对象的Map集合，type：每个对象是User类 -->
+    <select id="getAlluserid"   resultType="com.fwzg.quanx.entity.Useridlist">
+        select * from user
+    </select>
+
+    <select id="getAllEquid"   resultType="com.fwzg.quanx.entity.Equidlist">
+        select * from equipment_info
+    </select>
+    <insert id="addUserEqu" parameterType="com.fwzg.quanx.entity.Userequgx">
+        insert into sys_userdevice
+        (USERID,deviceID)
+        values
+        (#{USERID},#{deviceID})
+    </insert>
+    <select id="selectUserEqu" parameterType="com.fwzg.quanx.entity.Userequgx"  resultType="com.fwzg.quanx.entity.Userequgx">
+        select * from sys_userdevice
+        where 1=1
+
+            <if test="USERID != null and USERID !=''"   >
+                and  USERID = #{USERID}
+            </if>
+            <if test="deviceID != null and deviceID !=''">
+                and  deviceID = #{deviceID}
+            </if>
+
+
+    </select>
+    <select id="getUserequList" parameterType="com.fwzg.quanx.vo.UserequQuery"  resultType="com.fwzg.quanx.entity.Userequgx">
+        select * from sys_userdevice
+
+        <where>
+            <if test="deviceID != null">
+                deviceID like '%' #{deviceID} '%'
+            </if>
+        </where>
+        limit #{start},#{limit}
+    </select>
+    <select id="countUserequList" parameterType="com.fwzg.quanx.vo.UserequQuery"  resultType="Long">
+        select count(1) from sys_userdevice
+    </select>
+    <delete id="deleteUserequByIds" parameterType="string">
+        delete
+        from sys_userdevice
+        where  id in (${ids});
+    </delete>
+</mapper>

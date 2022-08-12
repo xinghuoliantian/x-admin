@@ -1,0 +1,99 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "/welcome"
+  },
+  "logoInfo": {
+    "title": "后台管理",
+    "image": "images/logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "设备管理",
+          "href": "",
+          "icon": "fa fa-user",
+          "target": "_self",
+          "child": [
+            {
+              "title": "添加设备",
+              "href": "equ/add/ui",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "设备列表",
+              "href": "equ",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            }
+
+          ]
+        },
+        {
+          "title": "权限管理",
+          "href": "",
+          "icon": "fa fa-window-maximize",
+          "target": "_self",
+		  "child": [
+
+		    {
+		      "title": "权限添加",
+		      "href": "quanx",
+		      "icon": "fa fa-tachometer",
+		      "target": "_self"
+		    },
+		    {
+		      "title": "权限删除",
+		      "href": "quanx/quanx2",
+		      "icon": "fa fa-tachometer",
+		      "target": "_self"
+		    }
+		  ]
+        },
+        {
+          "title": "数据分析",
+          "href": "",
+          "icon": "fa fa-window-maximize",
+          "target": "_self",
+          "child": [
+
+            {
+              "title": "工作量统计",
+              "href": "dataan",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            }
+
+          ]
+        },
+        {
+          "title": "地图模块",
+          "href": "",
+          "icon": "fa fa-window-maximize",
+          "target": "_self",
+          "child": [
+
+            {
+              "title": "设备地图",
+              "href": "equmap",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            }
+
+          ]
+        }
+
+
+      ]
+    }
+
+
+  ]
+}

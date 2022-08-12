@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fwzg.equipment.mapper.EquMapper">
+    <!-- id：返回的是所有对象的Map集合，type：每个对象是User类 -->
+    <select id="getEquList" parameterType="com.fwzg.equipment.vo.EquQuery"  resultType="com.fwzg.equipment.entity.Equ">
+        select * from equipment_info
+
+         <where>
+             <if test="deviceID != null">
+                 deviceID like '%' #{deviceID} '%'
+             </if>
+         </where>
+        limit #{start},#{limit}
+    </select>
+    <select id="countEquList" parameterType="com.fwzg.equipment.vo.EquQuery"  resultType="Long">
+        select count(1) from equipment_info
+    </select>
+    <insert id="addEqu" parameterType="com.fwzg.equipment.entity.Equ">
+        insert into equipment_info
+        (deviceID,equi_name,sort,equ_videoid,productiondate)
+        values
+        (#{deviceID},#{equi_name},#{sort},#{equ_videoid},#{productiondate})
+    </insert>
+
+    <delete id="deleteEquByIds" parameterType="string">
+        delete
+        from equipment_info
+        where  id in (${ids});
+    </delete>
+
+    <select id="getEquById" parameterType="integer" resultType="com.fwzg.equipment.entity.Equ">
+        select *
+        from equipment_info
+        where id = #{id};
+    </select>
+
+    <update id="updateEqu" parameterType="com.fwzg.equipment.entity.Equ">
+        update equipment_info
+        set deviceID     = #{deviceID},
+            equi_name      = #{equi_name},
+            sort      = #{sort},
+            equ_videoid      = #{equ_videoid},
+            productiondate = #{productiondate}
+         where  id = #{id}
+    </update>
+
+</mapper>
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fwzg.user.mapper.UserMapper">
+    <!-- id：返回的是所有对象的Map集合，type：每个对象是User类 -->
+    <select id="getUser" parameterType="User"  resultType="com.fwzg.user.entity.User">
+        select * from user where username=#{username} and password =#{password}
+    </select>
+</mapper>
+

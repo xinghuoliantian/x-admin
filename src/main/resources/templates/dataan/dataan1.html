@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>工作量统计</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/css/public.css}" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备编码</label>
+                            <div class="layui-input-block">
+                                <select name="sort" lay-verify="required">
+                                    <option value=""></option>
+                                    <option th:each="equn:${EqudList}" th:value="${equn.deviceID}">
+                                        <span th:text="${equn.deviceID}"></span>
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button id="btn-search" type="submit" class="layui-btn layui-btn-radius layui-btn-normal"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 查 询</button>
+                            <button id="btn-rst" type="reset" class="layui-btn layui-btn-radius layui-btn-normal"  ><i class="layui-icon layui-icon-return"></i> 重 置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <table id="table-equ" class="layui-hide" lay-filter="table-equ-filter"></table>
+
+    </div>
+</div>
+
+<script  th:src="@{/webjars/jQuery/dist/jquery.min.js}" charset="utf-8"></script>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script th:inline="javascript">
+
+    function refreshTable() {
+        $("#btn-rst").click();
+        $("#btn-search").click();
+
+    }
+    var ctxPath=[[@{/}]];
+        layui.use(['form', 'table'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table;
+
+            table.render({
+                elem: '#table-equ'
+                ,url: ctxPath+'dataan/list' //数据接口
+                ,page: true //开启分页
+                ,limits: [5, 10, 15, 25, 50, 100]
+                ,limit: 5
+                ,toolbar: '#toolbarDemo'
+                ,cols: [[ //表头
+                    {field: 'id', title: '序号', width:80, sort: true}
+                    ,{field: 'deviceID', title: '设备编码', width:150, sort: true}
+                    ,{field: 'count', title: '累计工作时间', width:150}
+
+
+                ]]
+            });
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+
+                var result = JSON.stringify(data.field);
+                //console.log(data.field.sort)
+                //刷新重载
+                table.reload('table-equ', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        deviceID: data.field.sort
+                    }
+                }, 'data');
+
+                return false;
+            });
+
+
+
+
+        });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>权限列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/css/public.css}" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="deviceID" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button id="btn-search" type="button" class="layui-btn layui-btn-radius layui-btn-normal"  lay-submit lay-filter="data-search-btn">
+                                <i class="layui-icon"></i> 搜 索</button>
+                            <button id="btn-rst" type="reset" class="layui-btn layui-btn-radius layui-btn-normal"  >
+                                <i class="layui-icon layui-icon-return"></i> 重 置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+
+            </div>
+        </script>
+
+        <table id="table-quanx" class="layui-hide" lay-filter="table-equ-filter"></table>
+
+        <script type="text/html" id="col-equ-toolbar">
+
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+    </div>
+</div>
+
+
+<script  th:src="@{/webjars/jQuery/dist/jquery.min.js}" charset="utf-8"></script>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script th:inline="javascript">
+
+    function refreshTable() {
+        $("#btn-rst").click();
+        $("#btn-search").click();
+
+    }
+    var ctxPath=[[@{/}]];
+        layui.use(['form', 'table'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table;
+
+            table.render({
+                elem: '#table-quanx'
+                ,url: ctxPath+'quanx/quanx2/list' //数据接口
+                ,page: true //开启分页
+                ,limits: [5, 10, 15, 25, 50, 100]
+                ,limit: 5
+                ,toolbar: '#toolbarDemo'
+                ,cols: [[ //表头
+
+                    {field: 'id', title: '序号', width:80, sort: true}
+                    ,{field: 'userid', title: '用户编码', width:105, sort: true}
+                    ,{field: 'deviceID', title: '设备编码', width:100}
+
+                    ,{title: '操作' , minWidth: 150, toolbar: '#col-equ-toolbar', align: "center"}
+                ]]
+            });
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                //console.log(data.field.deviceID) //当前容器的全部表单字段，名值对形式：{name: value}
+                var result = JSON.stringify(data.field);
+
+                //刷新重载
+                table.reload('table-quanx', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        deviceID: data.field.deviceID
+                    }
+                }, 'data');
+
+                return false;
+            });
+
+            /**
+             * toolbar 添加监听
+             */
+            table.on('toolbar(table-equ-filter)', function (obj) {
+                if (obj.event === 'add') {  // 监听添加操作
+                    var index = layer.open({
+                        title: '权限添加',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin:true,
+                        shadeClose: true,
+                        area: ['100%', '100%'],
+                        content: ctxPath+'quanx',
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                }
+                // 监听删除操作
+                else if (obj.event === 'delete') {
+
+
+                    //console.log(data[0].deviceID);
+
+
+                }
+            });
+
+            //监听表格复选框选择
+            table.on('checkbox(currentTableFilter)', function (obj) {
+                //console.log(obj)
+            });
+
+            //监听表格内操作按钮
+            table.on('tool(table-equ-filter)', function (obj) {
+                var data = obj.data;
+                //console.log(data)
+                if (obj.event === 'edit') {
+
+
+
+
+                    return false;
+
+
+                }
+                //单条删除
+                else if (obj.event === 'delete') {
+                    //删除一条
+                    layer.confirm('请确认删除该序号【'+ data.id + ' 】?' , {icon: 3, title:'确认'}, function (index) {
+                        //异步请求删除数据、刷新表格
+                        var url = ctxPath+"quanx/" + data.id;
+                        var params = {
+                            _method: "DELETE"
+                        }
+                        $.post(url, params, function (response) {
+                            if (response.code === 0) {
+                                layer.msg(response.message, {icon: 1 });
+                                refreshTable();
+                            } else {
+                                layer.msg(response.message, {icon: 2, anim: 6 })
+                                refreshTable();
+                            }
+                        });
+
+                    });
+
+                }
+            });
+
+        });
+</script>
+
+</body>
+</html>
